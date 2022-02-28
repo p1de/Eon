@@ -25,16 +25,19 @@ namespace Eon.Controllers
 
         // GET: api/items
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
+        public async Task<ActionResult<List<Item>>> GetItems()
         {
-            return await context.Items.Select(e => e).ToListAsync();
+            return await context.Items.Include(i => i.Owner).ToListAsync();
         }
 
         // GET: api/items/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> GetItem(int id)
+        public async Task<ActionResult<List<Item>>> GetItem(int id)
         {
-            var item = await context.Items.FindAsync(id);
+            var item = await context.Items
+                .Where(i => i.ItemId == id)
+                .Include(i => i.Owner)
+                .ToListAsync();
 
             if (item == null)
             {
