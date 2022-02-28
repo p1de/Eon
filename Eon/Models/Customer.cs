@@ -10,7 +10,7 @@ namespace Eon.Models
     {
         public Customer()
         {
-            Items = new HashSet<Item>();
+            Items = new List<Item>();
         }
 
         [Key]
@@ -26,7 +26,6 @@ namespace Eon.Models
         [Column(TypeName = "int")]
         public int CustomerWealth { get; set; }
 
-        [InverseProperty(nameof(Item.Owner))]
-        public ICollection<Item> Items { get; set; }
+        public List<Item> Items { get; set; }
     }
 }

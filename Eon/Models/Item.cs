@@ -20,9 +20,6 @@ namespace Eon.Models
         [Column(TypeName = "int")]
         public int ItemPrice { get; set; }
         public int? CustomerId { get; set; }
-
-        [ForeignKey(nameof(CustomerId))]
-        [InverseProperty("Items")]
         public Customer Owner { get; set; }
     }
 }
