@@ -31,6 +31,7 @@ namespace Eon.Models
                 entity.HasKey(e => e.ItemId);
                 entity.Property(e => e.ItemName).IsUnicode(false).HasMaxLength(20);
                 entity.Property(e => e.ItemPrice).IsUnicode(false).HasDefaultValue(0);
+                entity.HasOne(e => e.Owner).WithMany(e => e.Items);
             });
 
             modelBuilder.Entity<Customer>(entity =>

@@ -18,15 +18,18 @@ namespace Eon.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<ActionResult<List<Customer>>> GetCustomers()
         {
-            return await context.Customers.Select(e => e).ToListAsync();
+            return await context.Customers.Include(c => c.Items).ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<List<Customer>>> GetCustomer(int id)
         {
-            var Customer = await context.Customers.FindAsync(id);
+            var Customer = await context.Customers
+                .Where(c => c.CustomerId == id)
+                .Include(c => c.Items)
+                .ToListAsync();
 
             if (Customer == null)
             {

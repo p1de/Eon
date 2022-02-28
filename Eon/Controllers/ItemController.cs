@@ -25,14 +25,14 @@ namespace Eon.Controllers
 
         // GET: api/items
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Item>>> Getitems()
+        public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
             return await context.Items.Select(e => e).ToListAsync();
         }
 
         // GET: api/items/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Item>> Getitem(int id)
+        public async Task<ActionResult<Item>> GetItem(int id)
         {
             var item = await context.Items.FindAsync(id);
 
@@ -48,7 +48,7 @@ namespace Eon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> Putitem(int id, Item item)
+        public async Task<IActionResult> PutItem(int id, Item item)
         {
             if (id != item.ItemId)
             {
@@ -80,17 +80,19 @@ namespace Eon.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Item>> Postitem(Item item)
+        public async Task<ActionResult<Item>> PostItem(Item item)
         {
             context.Items.Add(item);
+            if (item.CustomerId != null || item.CustomerId != 0)
+                context.Customers.Where(c => c.CustomerId == item.CustomerId).FirstOrDefault().CustomerWealth += item.ItemPrice;
             await context.SaveChangesAsync();
-
+            
             return CreatedAtAction("GetItem", new { id = item.ItemId }, item);
         }
 
         // DELETE: api/items/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Item>> Deleteitem(int id)
+        public async Task<ActionResult<Item>> DeleteItem(int id)
         {
             var item = await context.Items.FindAsync(id);
             if (item == null)
